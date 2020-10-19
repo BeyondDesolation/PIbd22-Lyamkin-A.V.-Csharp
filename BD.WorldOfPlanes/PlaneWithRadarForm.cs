@@ -18,7 +18,15 @@ namespace BD.WorldOfPlanes
         public PlaneWithRadarForm()
         {
             InitializeComponent();
+            Start();
         }
+
+        public void SetPlane(ITransport plane)
+        {
+            this.plane = plane;
+            Draw();
+        }
+
         private void Draw()
         {
             graphics.Clear(Color.FromArgb(220, 220, 250));
@@ -58,7 +66,6 @@ namespace BD.WorldOfPlanes
 
         private void bStartPlane_Click(object sender, EventArgs e)
         {
-            Start();
             Random random = new Random();
             plane = new Plane
                 (random.Next(100, 300),
@@ -70,7 +77,6 @@ namespace BD.WorldOfPlanes
 
         private void bStartPlaneWithRadar_Click(object sender, EventArgs e)
         {
-            Start();
             Random random = new Random();
             plane = new PlaneWithRadar
                 (random.Next(100, 300),
@@ -81,7 +87,6 @@ namespace BD.WorldOfPlanes
                 true, true);
             plane.SetPosition(random.Next(10, 100), random.Next(10, 100), pictureBoxPlane.Width, pictureBoxPlane.Height);
             Draw();
-
         }
     }
 }

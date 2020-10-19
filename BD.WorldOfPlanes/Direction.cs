@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace BD.WorldOfPlanes
 {
-    enum Direction
+    public enum Direction
     {
         Left,
         Up,
         Right,
         Down
-
     }
 }

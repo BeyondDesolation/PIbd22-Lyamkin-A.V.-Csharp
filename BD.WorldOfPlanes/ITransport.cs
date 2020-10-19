@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BD.WorldOfPlanes
 {
-    interface ITransport
+    public interface ITransport
     {
         /// <summary>
         /// Установка позиции

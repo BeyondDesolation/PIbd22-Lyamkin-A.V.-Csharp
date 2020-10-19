@@ -16,7 +16,7 @@ namespace BD.WorldOfPlanes
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PlaneWithRadarForm());
+            Application.Run(new AirfieldForm());
         }
     }
 }
