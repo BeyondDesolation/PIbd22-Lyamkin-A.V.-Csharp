@@ -46,7 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aircraft.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="ITransport.cs" />
+    <Compile Include="Plane.cs" />
     <Compile Include="PlaneWithRadarForm.cs">
       <SubType>Form</SubType>
     </Compile>
