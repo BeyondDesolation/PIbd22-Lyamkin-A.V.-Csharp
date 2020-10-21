@@ -2,7 +2,7 @@
 
 namespace BD.WorldOfPlanes
 {
-    partial class PlaneWithRadarForm
+    partial class PlaneForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -30,7 +30,7 @@ namespace BD.WorldOfPlanes
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlaneWithRadarForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlaneForm));
             this.bMoveUp = new System.Windows.Forms.Button();
             this.bMoveDown = new System.Windows.Forms.Button();
             this.bMoveRight = new System.Windows.Forms.Button();

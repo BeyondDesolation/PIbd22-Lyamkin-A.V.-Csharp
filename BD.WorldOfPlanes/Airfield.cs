@@ -9,7 +9,9 @@ namespace BD.WorldOfPlanes
 {
     class Airfield<T> where T : class, ITransport
     {
-        private readonly T[] places;
+        private readonly List<T> places;
+
+        private readonly int airfieldSize;
 
         private readonly int fieldWidth;
         private readonly int fieldHeight;
@@ -21,7 +23,8 @@ namespace BD.WorldOfPlanes
         {
             int cols = fieldWidth / placeWidth;
             int rows = fieldHeight / placeHeight;
-            places = new T[rows * cols];
+            places = new List<T>();
+            airfieldSize = cols * rows;
 
             this.fieldWidth = fieldWidth;
             this.fieldHeight = fieldHeight;
@@ -29,39 +32,41 @@ namespace BD.WorldOfPlanes
 
         public static bool operator +(Airfield<T> airfield, T plane)
         {
-            // int cols = airfield.fieldWidth / placeWidth;
-            int rows = airfield.fieldHeight / placeHeight;
+            if (airfield.places.Count >= airfield.airfieldSize)
+                return false;
 
-            for (int i = 0; i < airfield.places.Length; i++)
-            {
-                if (airfield.places[i] == null)
-                {
-                    plane.SetPosition((i / rows) * placeWidth, (i % rows) * placeHeight, airfield.fieldWidth, airfield.fieldHeight);
-                    airfield.places[i] = plane;
-                    return true;
-                }
-            }
-            return false;
+            int rows = airfield.fieldHeight / placeHeight;
+            int i = airfield.places.Count;
+            plane.SetPosition((i / rows) * placeWidth, (i % rows) * placeHeight, airfield.fieldWidth, airfield.fieldHeight);
+            airfield.places.Add(plane);
+            return true;
         }
 
         public static T operator -(Airfield<T> airfield, int index)
         {
-            if (index >= airfield.places.Length || index < 0)
+            if (index >= airfield.places.Count || index < 0)
             {
                 return null;
             }
-            T temp = airfield.places[index];
-            airfield.places[index] = null;
 
+            T temp = airfield.places[index];
+            airfield.places.RemoveAt(index);
+
+            int rows = airfield.fieldHeight / placeHeight;
+            for (int i = 0; i < airfield.places.Count; i++)
+            {
+                airfield.places[i].SetPosition((i / rows) * placeWidth, (i % rows) * placeHeight, airfield.fieldWidth, airfield.fieldHeight);
+            }
+          
             return temp;
         }
 
         public void Draw(Graphics g)
         {
             DrawMarking(g);
-            for (int i = 0; i < places.Length; i++)
+            for (int i = 0; i < places.Count; i++)
             {
-                places[i]?.Draw(g);
+                places[i].Draw(g);
             }
         }
         private void DrawMarking(Graphics g)

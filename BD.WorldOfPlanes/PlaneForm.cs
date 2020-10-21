@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace BD.WorldOfPlanes
 {
-    public partial class PlaneWithRadarForm : Form
+    public partial class PlaneForm : Form
     {
         private ITransport plane;
         private Graphics graphics;
 
-        public PlaneWithRadarForm()
+        public PlaneForm()
         {
             InitializeComponent();
             Start();

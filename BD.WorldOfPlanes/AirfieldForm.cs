@@ -12,13 +12,13 @@ namespace BD.WorldOfPlanes
 {
     public partial class AirfieldForm : Form
     {
-        private readonly Airfield<Aircraft> airfield;
+        private readonly AirfieldCollection airfieldCollection;
         private Graphics graphics;
 
         public AirfieldForm()
         {
             InitializeComponent();
-            airfield = new Airfield<Aircraft>(pictureBoxAircraft.Width, pictureBoxAircraft.Height);
+            airfieldCollection = new AirfieldCollection(pictureBoxAircraft.Width, pictureBoxAircraft.Height);
             InitGraphics();
             Draw();
         }
@@ -31,39 +31,42 @@ namespace BD.WorldOfPlanes
         }
         private void Draw()
         {
-            graphics.Clear(Color.WhiteSmoke);
-            airfield.Draw(graphics);
-            pictureBoxAircraft.Refresh();
+            if(lbExistingAirfields.SelectedIndex > -1)
+            {
+                graphics.Clear(Color.WhiteSmoke);
+                airfieldCollection[lbExistingAirfields.SelectedItem.ToString()].Draw(graphics);
+                pictureBoxAircraft.Refresh();
+            }
+        }
+
+        private void ReloadLevels()
+        {
+            int index = lbExistingAirfields.SelectedIndex;
+            lbExistingAirfields.Items.Clear();
+            for (int i = 0; i < airfieldCollection.Keys.Count; i++)
+            {
+                lbExistingAirfields.Items.Add(airfieldCollection.Keys[i]);
+            }
+            if (lbExistingAirfields.Items.Count > 0 && (index == -1 || index >= lbExistingAirfields.Items.Count))
+            {
+                lbExistingAirfields.SelectedIndex = 0;
+            }
+            else if (lbExistingAirfields.Items.Count > 0 && index > -1 && index < lbExistingAirfields.Items.Count)
+            {
+                lbExistingAirfields.SelectedIndex = index;
+            }
         }
 
         private void bSetPlane_Click(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if(lbExistingAirfields.SelectedIndex > -1)
             {
-                var car = new Plane(100, 1000, dialog.Color);
+                ColorDialog dialog = new ColorDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    var car = new Plane(100, 1000, dialog.Color);
 
-                if (airfield + car)
-                {
-                    Draw();
-                }
-                else
-                {
-                    MessageBox.Show("Аэропорт переполнен");
-                }
-            }
-        }
-
-        private void bSetPlaneWithRadar_Click(object sender, EventArgs e)
-        {
-            ColorDialog dialog = new ColorDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                ColorDialog dialogDop = new ColorDialog();
-                if (dialogDop.ShowDialog() == DialogResult.OK)
-                {
-                    var car = new PlaneWithRadar(100, 1000, dialog.Color, dialogDop.Color, dialogDop.Color, true, true);
-                    if (airfield + car)
+                    if (airfieldCollection[lbExistingAirfields.SelectedItem.ToString()] + car)
                     {
                         Draw();
                     }
@@ -74,19 +77,78 @@ namespace BD.WorldOfPlanes
                 }
             }
         }
+
+        private void bSetPlaneWithRadar_Click(object sender, EventArgs e)
+        {
+            if (lbExistingAirfields.SelectedIndex > -1)
+            {
+                ColorDialog dialog = new ColorDialog();
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    ColorDialog dialogDop = new ColorDialog();
+                    if (dialogDop.ShowDialog() == DialogResult.OK)
+                    {
+                        var car = new PlaneWithRadar(100, 1000, dialog.Color, dialogDop.Color, dialogDop.Color, true, true);
+                        if (airfieldCollection[lbExistingAirfields.SelectedItem.ToString()] + car)
+                        {
+                            Draw();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Аэропорт переполнен");
+                        }
+                    }
+                }
+            }
+        }
         private void bTakePlane_Click(object sender, EventArgs e)
         {
-            if (maskedTextBox.Text != "")
+            if (lbExistingAirfields.SelectedIndex > -1 && maskedTextBox.Text != "")
             {
-                var car = airfield - Convert.ToInt32(maskedTextBox.Text);
-                if (car != null)
+                if (maskedTextBox.Text != "")
                 {
-                    var form = new PlaneWithRadarForm();
-                    form.SetPlane(car);
-                    form.ShowDialog();
+                    var car = airfieldCollection[lbExistingAirfields.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
+                    if (car != null)
+                    {
+                        var form = new PlaneForm();
+                        form.SetPlane(car);
+                        form.ShowDialog();
+                    }
+                    Draw();
                 }
-                Draw();
             }
+        }
+
+        private void bCreateNewAirfield_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbNewAirfieldName.Text))
+            {
+                MessageBox.Show("Введите название парковки", "Ошибка",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            airfieldCollection.Add(tbNewAirfieldName.Text);
+            ReloadLevels();
+        }
+
+        private void bDeleteAirfield_Click(object sender, EventArgs e)
+        {
+            if (lbExistingAirfields.SelectedIndex > -1)
+            {
+                if (MessageBox.Show($"Удалить парковку " +
+                    $"{lbExistingAirfields.SelectedItem}?", "Удаление",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    airfieldCollection.Delete(tbNewAirfieldName.Text);
+                    ReloadLevels();
+                }
+            }
+        }
+
+        private void lbExistingAirfields_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Draw();
         }
     }
 }

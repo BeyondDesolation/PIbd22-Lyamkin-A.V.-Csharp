@@ -30,6 +30,10 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBoxAircraft = new System.Windows.Forms.PictureBox();
+            this.bCreateNewAirfield = new System.Windows.Forms.Button();
+            this.bDeleteAirfield = new System.Windows.Forms.Button();
+            this.tbNewAirfieldName = new System.Windows.Forms.TextBox();
+            this.lbExistingAirfields = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.bTakePlane = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -58,6 +62,10 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.bCreateNewAirfield);
+            this.splitContainer1.Panel2.Controls.Add(this.bDeleteAirfield);
+            this.splitContainer1.Panel2.Controls.Add(this.tbNewAirfieldName);
+            this.splitContainer1.Panel2.Controls.Add(this.lbExistingAirfields);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
             this.splitContainer1.Panel2.Controls.Add(this.bSetPlaneWithRadar);
             this.splitContainer1.Panel2.Controls.Add(this.bSetPlane);
@@ -75,6 +83,45 @@
             this.pictureBoxAircraft.TabIndex = 0;
             this.pictureBoxAircraft.TabStop = false;
             // 
+            // bCreateNewAirfield
+            // 
+            this.bCreateNewAirfield.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bCreateNewAirfield.Location = new System.Drawing.Point(17, 50);
+            this.bCreateNewAirfield.Name = "bCreateNewAirfield";
+            this.bCreateNewAirfield.Size = new System.Drawing.Size(233, 50);
+            this.bCreateNewAirfield.TabIndex = 6;
+            this.bCreateNewAirfield.Text = "Добавить аэродром";
+            this.bCreateNewAirfield.UseVisualStyleBackColor = true;
+            this.bCreateNewAirfield.Click += new System.EventHandler(this.bCreateNewAirfield_Click);
+            // 
+            // bDeleteAirfield
+            // 
+            this.bDeleteAirfield.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bDeleteAirfield.Location = new System.Drawing.Point(17, 306);
+            this.bDeleteAirfield.Name = "bDeleteAirfield";
+            this.bDeleteAirfield.Size = new System.Drawing.Size(233, 50);
+            this.bDeleteAirfield.TabIndex = 5;
+            this.bDeleteAirfield.Text = "Удалить аэропорт";
+            this.bDeleteAirfield.UseVisualStyleBackColor = true;
+            this.bDeleteAirfield.Click += new System.EventHandler(this.bDeleteAirfield_Click);
+            // 
+            // tbNewAirfieldName
+            // 
+            this.tbNewAirfieldName.Location = new System.Drawing.Point(17, 22);
+            this.tbNewAirfieldName.Name = "tbNewAirfieldName";
+            this.tbNewAirfieldName.Size = new System.Drawing.Size(233, 22);
+            this.tbNewAirfieldName.TabIndex = 4;
+            // 
+            // lbExistingAirfields
+            // 
+            this.lbExistingAirfields.FormattingEnabled = true;
+            this.lbExistingAirfields.ItemHeight = 16;
+            this.lbExistingAirfields.Location = new System.Drawing.Point(17, 152);
+            this.lbExistingAirfields.Name = "lbExistingAirfields";
+            this.lbExistingAirfields.Size = new System.Drawing.Size(227, 148);
+            this.lbExistingAirfields.TabIndex = 3;
+            this.lbExistingAirfields.SelectedIndexChanged += new System.EventHandler(this.lbExistingAirfields_SelectedIndexChanged);
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -82,7 +129,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.maskedTextBox);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(17, 189);
+            this.groupBox1.Location = new System.Drawing.Point(17, 520);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(233, 138);
             this.groupBox1.TabIndex = 2;
@@ -131,7 +178,7 @@
             // bSetPlaneWithRadar
             // 
             this.bSetPlaneWithRadar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bSetPlaneWithRadar.Location = new System.Drawing.Point(17, 97);
+            this.bSetPlaneWithRadar.Location = new System.Drawing.Point(17, 458);
             this.bSetPlaneWithRadar.Name = "bSetPlaneWithRadar";
             this.bSetPlaneWithRadar.Size = new System.Drawing.Size(233, 56);
             this.bSetPlaneWithRadar.TabIndex = 1;
@@ -142,7 +189,7 @@
             // bSetPlane
             // 
             this.bSetPlane.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bSetPlane.Location = new System.Drawing.Point(17, 41);
+            this.bSetPlane.Location = new System.Drawing.Point(17, 402);
             this.bSetPlane.Name = "bSetPlane";
             this.bSetPlane.Size = new System.Drawing.Size(233, 50);
             this.bSetPlane.TabIndex = 0;
@@ -160,6 +207,7 @@
             this.Text = "Аэропорт";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAircraft)).EndInit();
@@ -180,5 +228,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.MaskedTextBox maskedTextBox;
         private System.Windows.Forms.Button bTakePlane;
+        private System.Windows.Forms.Button bCreateNewAirfield;
+        private System.Windows.Forms.Button bDeleteAirfield;
+        private System.Windows.Forms.TextBox tbNewAirfieldName;
+        private System.Windows.Forms.ListBox lbExistingAirfields;
     }
 }
