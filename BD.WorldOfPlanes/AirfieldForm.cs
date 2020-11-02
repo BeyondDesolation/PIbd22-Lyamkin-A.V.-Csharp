@@ -140,7 +140,9 @@ namespace BD.WorldOfPlanes
                     $"{lbExistingAirfields.SelectedItem}?", "Удаление",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    airfieldCollection.Delete(tbNewAirfieldName.Text);
+
+                    airfieldCollection.Delete(lbExistingAirfields.SelectedItem.ToString());
+                   
                     ReloadLevels();
                 }
             }

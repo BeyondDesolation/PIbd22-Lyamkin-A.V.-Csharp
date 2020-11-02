@@ -99,7 +99,7 @@
             this.bDeleteAirfield.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bDeleteAirfield.Location = new System.Drawing.Point(17, 306);
             this.bDeleteAirfield.Name = "bDeleteAirfield";
-            this.bDeleteAirfield.Size = new System.Drawing.Size(233, 50);
+            this.bDeleteAirfield.Size = new System.Drawing.Size(227, 50);
             this.bDeleteAirfield.TabIndex = 5;
             this.bDeleteAirfield.Text = "Удалить аэропорт";
             this.bDeleteAirfield.UseVisualStyleBackColor = true;

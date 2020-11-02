@@ -16,7 +16,9 @@ namespace BD.WorldOfPlanes
         {
             get
             {
-                if(airfieldScenes.ContainsKey(index))             
+                List<String> l = airfieldScenes.Keys.ToList();
+
+                if (airfieldScenes.ContainsKey(index))             
                    return airfieldScenes[index];
 
                 return null;
@@ -47,13 +49,21 @@ namespace BD.WorldOfPlanes
         }
         public void Delete(string name)
         {
+
             if (airfieldScenes.ContainsKey(name))
             {
                 airfieldScenes.Remove(name);
             }
         }
+        public void Delete(int index)
+        {
+            if(index < 0 || index >= airfieldScenes.Count)
+            {
+                return;
+            }
+           
+            airfieldScenes.Remove(Keys[index]);
+        }
        
-
-
     }
 }
