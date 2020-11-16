@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace BD.WorldOfPlanes
 {
+    public delegate void PlaneDelegate(Aircraft aircraft);
     static class Program
     {
         /// <summary>

@@ -8,11 +8,11 @@ namespace BD.WorldOfPlanes
 {
     class AirfieldCollection
     {
-        readonly Dictionary<String, Airfield<Plane>> airfieldScenes;
+        readonly Dictionary<String, Airfield<Aircraft>> airfieldScenes;
 
         public List<String> Keys => airfieldScenes.Keys.ToList();
 
-        public Airfield<Plane> this[string index]
+        public Airfield<Aircraft> this[string index]
         {
             get
             {
@@ -23,6 +23,7 @@ namespace BD.WorldOfPlanes
 
                 return null;
             }
+
         }
         /// <summary>
         /// Ширина окна отрисовки
@@ -36,7 +37,7 @@ namespace BD.WorldOfPlanes
 
         public AirfieldCollection(int airfieldPictureWidth, int airfieldPictureHeight)
         {
-            airfieldScenes = new Dictionary<string, Airfield<Plane>>();
+            airfieldScenes = new Dictionary<string, Airfield<Aircraft>>();
             pictureWidth = airfieldPictureWidth;
             pictureHeight = airfieldPictureHeight;
         }
@@ -45,7 +46,7 @@ namespace BD.WorldOfPlanes
             if (airfieldScenes.ContainsKey(name))
                 return;
 
-            airfieldScenes.Add(name, new Airfield<Plane>(pictureWidth, pictureHeight));
+            airfieldScenes.Add(name, new Airfield<Aircraft>(pictureWidth, pictureHeight));
         }
         public void Delete(string name)
         {

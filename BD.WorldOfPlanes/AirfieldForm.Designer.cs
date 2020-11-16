@@ -39,7 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.maskedTextBox = new System.Windows.Forms.MaskedTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.bSetPlaneWithRadar = new System.Windows.Forms.Button();
             this.bSetPlane = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -67,7 +66,6 @@
             this.splitContainer1.Panel2.Controls.Add(this.tbNewAirfieldName);
             this.splitContainer1.Panel2.Controls.Add(this.lbExistingAirfields);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Panel2.Controls.Add(this.bSetPlaneWithRadar);
             this.splitContainer1.Panel2.Controls.Add(this.bSetPlane);
             this.splitContainer1.Size = new System.Drawing.Size(1262, 672);
             this.splitContainer1.SplitterDistance = 994;
@@ -175,17 +173,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Забрать самолет";
             // 
-            // bSetPlaneWithRadar
-            // 
-            this.bSetPlaneWithRadar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bSetPlaneWithRadar.Location = new System.Drawing.Point(17, 458);
-            this.bSetPlaneWithRadar.Name = "bSetPlaneWithRadar";
-            this.bSetPlaneWithRadar.Size = new System.Drawing.Size(233, 56);
-            this.bSetPlaneWithRadar.TabIndex = 1;
-            this.bSetPlaneWithRadar.Text = "Посадить самолет с радаром";
-            this.bSetPlaneWithRadar.UseVisualStyleBackColor = true;
-            this.bSetPlaneWithRadar.Click += new System.EventHandler(this.bSetPlaneWithRadar_Click);
-            // 
             // bSetPlane
             // 
             this.bSetPlane.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -221,7 +208,6 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.PictureBox pictureBoxAircraft;
-        private System.Windows.Forms.Button bSetPlaneWithRadar;
         private System.Windows.Forms.Button bSetPlane;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;

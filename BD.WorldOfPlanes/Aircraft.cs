@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BD.WorldOfPlanes
 {
-    abstract class Aircraft : ITransport
+    public abstract class Aircraft : ITransport
     {
         protected float posX;
         protected float posY;
@@ -29,5 +29,10 @@ namespace BD.WorldOfPlanes
         }
         public abstract void Draw(Graphics g);
         public abstract void Move(Direction direction);
+
+        public void SetMainColor(Color color)
+        {
+            MainColor = color;
+        }
     }
 }

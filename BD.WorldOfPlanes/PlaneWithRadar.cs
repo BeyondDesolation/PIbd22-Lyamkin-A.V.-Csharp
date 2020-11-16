@@ -13,8 +13,8 @@ namespace BD.WorldOfPlanes
         public bool MoreEngine { get; private set; }
         public int RadarRage { get; private set; }
 
-        public Color DopColor { get; }
-        public Color DetailsBrush { get; }
+        public Color DopColor { get; private set; }
+        public Color DetailsColor { get; private set; }
 
         private SolidBrush mainBrush;
         private SolidBrush dopBrush;
@@ -27,18 +27,23 @@ namespace BD.WorldOfPlanes
             Weight = weight;
             MainColor = main;
             DopColor = dop;
-            DetailsBrush = details;
+            DetailsColor = details;
             HasRadar = radar;
             MoreEngine = moreEngine;
 
-            mainBrush = new SolidBrush(MainColor);
-            dopBrush = new SolidBrush(DopColor);
-            detailsBrush = new SolidBrush(DetailsBrush);
+        }
+
+        public void SetDopColor(Color color)
+        {
+            DopColor = color;
+            DetailsColor = color;
         }
 
         public override void Draw(Graphics g)
         {
-
+            mainBrush = new SolidBrush(MainColor);
+            dopBrush = new SolidBrush(DopColor);
+            detailsBrush = new SolidBrush(DetailsColor);
             base.Draw(g);
             // Двигатель, что ближе к хвосту.
             if (MoreEngine)

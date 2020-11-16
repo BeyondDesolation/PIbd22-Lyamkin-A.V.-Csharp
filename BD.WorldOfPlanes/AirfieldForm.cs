@@ -56,51 +56,29 @@ namespace BD.WorldOfPlanes
                 lbExistingAirfields.SelectedIndex = index;
             }
         }
-
+         
         private void bSetPlane_Click(object sender, EventArgs e)
         {
-            if(lbExistingAirfields.SelectedIndex > -1)
-            {
-                ColorDialog dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    var car = new Plane(100, 1000, dialog.Color);
-
-                    if (airfieldCollection[lbExistingAirfields.SelectedItem.ToString()] + car)
-                    {
-                        Draw();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Аэропорт переполнен");
-                    }
-                }
-            }
+            var formCarConfig = new PlaneConfigForm();
+            formCarConfig.AddEvent(AddPlane);
+            formCarConfig.Show();
         }
-
-        private void bSetPlaneWithRadar_Click(object sender, EventArgs e)
+    
+        private void AddPlane(Aircraft aircraft)
         {
-            if (lbExistingAirfields.SelectedIndex > -1)
+            if (aircraft != null && lbExistingAirfields.SelectedIndex > -1)
             {
-                ColorDialog dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if ((airfieldCollection[lbExistingAirfields.SelectedItem.ToString()]) + aircraft)
                 {
-                    ColorDialog dialogDop = new ColorDialog();
-                    if (dialogDop.ShowDialog() == DialogResult.OK)
-                    {
-                        var car = new PlaneWithRadar(100, 1000, dialog.Color, dialogDop.Color, dialogDop.Color, true, true);
-                        if (airfieldCollection[lbExistingAirfields.SelectedItem.ToString()] + car)
-                        {
-                            Draw();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Аэропорт переполнен");
-                        }
-                    }
+                    Draw();
+                }
+                else
+                {
+                    MessageBox.Show("Аэропорт переполнен");
                 }
             }
         }
+      
         private void bTakePlane_Click(object sender, EventArgs e)
         {
             if (lbExistingAirfields.SelectedIndex > -1 && maskedTextBox.Text != "")
