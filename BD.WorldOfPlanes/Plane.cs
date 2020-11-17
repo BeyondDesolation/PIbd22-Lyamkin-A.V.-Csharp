@@ -12,11 +12,23 @@ namespace BD.WorldOfPlanes
         protected readonly int planeWidth = 200;
         protected readonly int planeHeight = 100;
 
+        protected readonly char separator = ';';
+
         public Plane(int maxSpeed, float weight, Color mainColor)
         {
             MaxSpeed = maxSpeed;
             Weight = weight;
             MainColor = mainColor;
+        }
+        public Plane(string info)
+        {
+            string[] arrInfo = info.Split(separator);
+            if(arrInfo.Length == 3)
+            {
+                MaxSpeed = Convert.ToInt32(arrInfo[0]);
+                Weight = Convert.ToInt32(arrInfo[1]);
+                MainColor = Color.FromArgb(Convert.ToInt32(arrInfo[2]));
+            }
         }
 
         protected Plane(int maxSpeed, float weight, Color mainColor, int planeWidth, int planeHeight)
@@ -108,6 +120,11 @@ namespace BD.WorldOfPlanes
                 new Point((int)posX +30, (int)posY + 65),
             };
             g.FillPolygon(detailsBrush, points3);
+        }
+
+        public override string ToString()
+        {
+            return $"{MaxSpeed}{separator}{Weight}{separator}{MainColor.ToArgb()}";
         }
     }
 }

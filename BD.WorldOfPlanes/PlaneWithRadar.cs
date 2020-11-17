@@ -23,16 +23,26 @@ namespace BD.WorldOfPlanes
         public PlaneWithRadar(int maxSpeed, int weight, Color main, Color dop, Color details, bool radar, bool moreEngine)
             : base(maxSpeed, weight, main, 200, 100)
         {
-            MaxSpeed = maxSpeed;
-            Weight = weight;
-            MainColor = main;
             DopColor = dop;
             DetailsColor = details;
             HasRadar = radar;
             MoreEngine = moreEngine;
-
         }
-
+        public PlaneWithRadar(string info) : base(info)
+        {
+            string[] arrInfo = info.Split(separator);
+            if (arrInfo.Length == 7)
+            {
+                MaxSpeed = Convert.ToInt32(arrInfo[0]);
+                Weight = Convert.ToInt32(arrInfo[1]);
+                MainColor = Color.FromArgb( Convert.ToInt32(arrInfo[2]));             
+                DopColor = Color.FromArgb(Convert.ToInt32(arrInfo[3]));
+                DetailsColor = Color.FromArgb(Convert.ToInt32(arrInfo[4]));
+                HasRadar = Convert.ToBoolean(arrInfo[5]);
+                MoreEngine = Convert.ToBoolean(arrInfo[6]);
+               
+            }
+        }
         public void SetDopColor(Color color)
         {
             DopColor = color;
@@ -96,6 +106,14 @@ namespace BD.WorldOfPlanes
                 g.FillPolygon(mainBrush, points4);
                 g.FillEllipse(dopBrush, (int)posX + 87, (int)posY + 25, 55, 12);
             }
+
         }
+        public override string ToString()
+        {
+           return
+           $"{base.ToString()}{separator}{DopColor.ToArgb()}{separator}" +
+           $"{DopColor.ToArgb()}{separator}{HasRadar}{separator}{MoreEngine}";
+        }
+
     }
 }

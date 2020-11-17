@@ -130,5 +130,43 @@ namespace BD.WorldOfPlanes
         {
             Draw();
         }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fdSave.ShowDialog() == DialogResult.OK)
+            {
+                if (airfieldCollection.SaveData(fdSave.FileName))
+                {
+                    MessageBox.Show("Сохранение прошло успешно", "Результат",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Не сохранилось", "Результат",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fdOpen.ShowDialog() == DialogResult.OK)
+            {
+                if (airfieldCollection.LoadData(fdOpen.FileName))
+                {
+                    MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                    ReloadLevels();
+                    Draw();
+                }
+                else
+                {
+                    MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                }
+            }
+        }
+
+       
     }
 }
