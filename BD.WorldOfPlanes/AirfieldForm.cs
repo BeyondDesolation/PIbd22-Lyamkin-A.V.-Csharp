@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +15,7 @@ namespace BD.WorldOfPlanes
     {
         private readonly AirfieldCollection airfieldCollection;
         private Graphics graphics;
+        private readonly Logger logger;
 
         public AirfieldForm()
         {
@@ -21,6 +23,8 @@ namespace BD.WorldOfPlanes
             airfieldCollection = new AirfieldCollection(pictureBoxAircraft.Width, pictureBoxAircraft.Height);
             InitGraphics();
             Draw();
+
+            logger = LogManager.GetCurrentClassLogger();
         }
 
         private void InitGraphics()
@@ -68,13 +72,26 @@ namespace BD.WorldOfPlanes
         {
             if (aircraft != null && lbExistingAirfields.SelectedIndex > -1)
             {
-                if ((airfieldCollection[lbExistingAirfields.SelectedItem.ToString()]) + aircraft)
+                try
                 {
-                    Draw();
+                    if ((airfieldCollection[lbExistingAirfields.SelectedItem.ToString()]) + aircraft)
+                    {
+                        Draw();
+                        logger.Info("Добавлен самолет " + aircraft);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Аэропорт переполнен");
+                    }
                 }
-                else
+                catch(AirfieldOverflowException ex)
                 {
-                    MessageBox.Show("Аэропорт переполнен");
+                    MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Ошибка: " + ex.Message);
+                }catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Неизвестная ошибка: " + ex.Message);
                 }
             }
         }
@@ -85,14 +102,30 @@ namespace BD.WorldOfPlanes
             {
                 if (maskedTextBox.Text != "")
                 {
-                    var car = airfieldCollection[lbExistingAirfields.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
-                    if (car != null)
+                    try
                     {
-                        var form = new PlaneForm();
-                        form.SetPlane(car);
-                        form.ShowDialog();
+                        var plane = airfieldCollection[lbExistingAirfields.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
+                        if (plane != null)
+                        {
+                            var form = new PlaneForm();
+                            form.SetPlane(plane);
+                            form.ShowDialog();
+
+                            logger.Info("Изъят самолет " + plane + " с маста " + maskedTextBox.Text);
+                        }
+                        Draw();
                     }
-                    Draw();
+                    catch(AirfieldNotFoundException ex)
+                    {                    
+                        MessageBox.Show(ex.Message, "Не найдено", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        logger.Warn("Ошибка: " + ex.Message);
+
+                    }
+                    catch (Exception ex)
+                    {                       
+                        MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        logger.Warn("Неизвестная ошибка: " + ex.Message);
+                    }
                 }
             }
         }
@@ -106,6 +139,7 @@ namespace BD.WorldOfPlanes
                 return;
             }
 
+            logger.Info($"Добавили аэродром {tbNewAirfieldName.Text}");
             airfieldCollection.Add(tbNewAirfieldName.Text);
             ReloadLevels();
         }
@@ -118,7 +152,7 @@ namespace BD.WorldOfPlanes
                     $"{lbExistingAirfields.SelectedItem}?", "Удаление",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-
+                    logger.Info($"Удалили аэродром {lbExistingAirfields.SelectedItem.ToString()}"); 
                     airfieldCollection.Delete(lbExistingAirfields.SelectedItem.ToString());
                    
                     ReloadLevels();
@@ -128,6 +162,7 @@ namespace BD.WorldOfPlanes
 
         private void lbExistingAirfields_SelectedIndexChanged(object sender, EventArgs e)
         {
+            logger.Info($"Перешли на аэродром {lbExistingAirfields.SelectedItem.ToString()}");
             Draw();
         }
 
@@ -135,15 +170,17 @@ namespace BD.WorldOfPlanes
         {
             if (fdSave.ShowDialog() == DialogResult.OK)
             {
-                if (airfieldCollection.SaveData(fdSave.FileName))
+                try
                 {
-                    MessageBox.Show("Сохранение прошло успешно", "Результат",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                     airfieldCollection.SaveData(fdSave.FileName);
+                     MessageBox.Show("Сохранение прошло успешно", "Результат",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                     logger.Info("Сохранен файл " + fdSave.FileName);
                 }
-                else
+                catch(Exception ex)
                 {
-                    MessageBox.Show("Не сохранилось", "Результат",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Неизвестная ошибка при сохранении: " + ex.Message);
                 }
             }
         }
@@ -152,21 +189,32 @@ namespace BD.WorldOfPlanes
         {
             if (fdOpen.ShowDialog() == DialogResult.OK)
             {
-                if (airfieldCollection.LoadData(fdOpen.FileName))
+                try
                 {
+                    airfieldCollection.LoadData(fdOpen.FileName);
                     MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                     ReloadLevels();
                     Draw();
+                    logger.Info("Загружены данные из файла: " + fdOpen.FileName);
                 }
-                else
+                catch(FileFormatExeption ex)
                 {
-                    MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Ошибка в формате файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Ошибка формата файла: " + ex.Message);
                 }
+                catch (AddingToAirfiledExeption ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка при загрузе", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Ошибка при загрузке: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Неизвестная ошибка при загрузке", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Неизвестная ошибка при загрузке: " + ex.Message);
+                }            
             }
         }
-
-       
+   
     }
 }

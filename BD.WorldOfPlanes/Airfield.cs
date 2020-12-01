@@ -33,8 +33,9 @@ namespace BD.WorldOfPlanes
         public static bool operator +(Airfield<T> airfield, T plane)
         {
             if (airfield.places.Count >= airfield.airfieldSize)
-                return false;
-
+            {
+                throw new AirfieldOverflowException();
+            }
             int rows = airfield.fieldHeight / placeHeight;
             int i = airfield.places.Count;
             plane.SetPosition((i / rows) * placeWidth, (i % rows) * placeHeight, airfield.fieldWidth, airfield.fieldHeight);
@@ -46,9 +47,8 @@ namespace BD.WorldOfPlanes
         {
             if (index >= airfield.places.Count || index < 0)
             {
-                return null;
+                throw new AirfieldNotFoundException(index);
             }
-
             T temp = airfield.places[index];
             airfield.places.RemoveAt(index);
 
@@ -56,8 +56,7 @@ namespace BD.WorldOfPlanes
             for (int i = 0; i < airfield.places.Count; i++)
             {
                 airfield.places[i].SetPosition((i / rows) * placeWidth, (i % rows) * placeHeight, airfield.fieldWidth, airfield.fieldHeight);
-            }
-          
+            }          
             return temp;
         }
 

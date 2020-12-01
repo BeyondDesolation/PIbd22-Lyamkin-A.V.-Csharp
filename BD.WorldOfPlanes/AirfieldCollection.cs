@@ -69,7 +69,7 @@ namespace BD.WorldOfPlanes
             airfieldScenes.Remove(Keys[index]);
         }
 
-        public bool SaveData(string filename)
+        public void SaveData(string filename)
         {
             if (File.Exists(filename))
             {
@@ -104,14 +104,13 @@ namespace BD.WorldOfPlanes
                     }
                 }
             }
-            return true;
         }
 
-        public bool LoadData(string filename)
+        public void LoadData(string filename)
         {
             if (!File.Exists(filename))
             {
-                return false;
+                throw  new FileNotFoundException();
             }
 
             using (StreamReader sr = new StreamReader(filename, Encoding.UTF8))
@@ -126,7 +125,7 @@ namespace BD.WorldOfPlanes
                 else
                 {
                     //если нет такой записи, то это не те данные
-                    return false;
+                    throw new FileFormatExeption(); 
                 }
                 while ((data = sr.ReadLine()) != null)
                 {
@@ -155,11 +154,10 @@ namespace BD.WorldOfPlanes
                     }
                     if (!(airfieldScenes[key] + plane))
                     {
-                        return false;
+                        throw new AddingToAirfiledExeption(key);
                     }
                 }
             }
-            return true;
         }
 
        // Дополнительное задание
