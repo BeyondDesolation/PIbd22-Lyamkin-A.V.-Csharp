@@ -84,6 +84,11 @@ namespace BD.WorldOfPlanes
                         MessageBox.Show("Аэропорт переполнен");
                     }
                 }
+                catch (NullReferenceException ex)
+                {
+                    MessageBox.Show(ex.Message, "Объект не существует", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    logger.Warn("Ошибка: " + ex.Message);
+                }
                 catch(AirfieldOverflowException ex)
                 {
                     MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -215,6 +220,16 @@ namespace BD.WorldOfPlanes
                 }            
             }
         }
-   
+
+        private void bSort_Click(object sender, EventArgs e)
+        {
+            if (lbExistingAirfields.SelectedIndex > -1)
+            {
+                airfieldCollection[lbExistingAirfields.SelectedItem.ToString()].Sort();
+                Draw();
+                logger.Info("Сортировка уровней");
+            }
+            Draw();
+        }
     }
 }

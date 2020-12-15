@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace BD.WorldOfPlanes
 {
-    class Airfield<T> where T : class, ITransport
+    class Airfield<T> : IEnumerator<T>, IEnumerable<T>
+        where T : class, ITransport
     {
         private readonly List<T> places;
 
@@ -18,6 +20,11 @@ namespace BD.WorldOfPlanes
 
         private const int placeWidth = 350;
         private const int placeHeight = 100;
+
+        private int currentIndex = -1;
+        public T Current => places[currentIndex];
+
+        object IEnumerator.Current => places[currentIndex];
 
         public Airfield(int fieldWidth, int fieldHeight)
         {
@@ -32,9 +39,17 @@ namespace BD.WorldOfPlanes
 
         public static bool operator +(Airfield<T> airfield, T plane)
         {
+            if(plane == null)
+            {
+                throw new NullReferenceException("Ссылка должна указывать на объект");
+            }
             if (airfield.places.Count >= airfield.airfieldSize)
             {
                 throw new AirfieldOverflowException();
+            }
+            if (airfield.places.Contains(plane))
+            {
+                throw new ParkingAlreadyHaveException();
             }
             int rows = airfield.fieldHeight / placeHeight;
             int i = airfield.places.Count;
@@ -62,9 +77,11 @@ namespace BD.WorldOfPlanes
 
         public void Draw(Graphics g)
         {
+            int rows = fieldHeight / placeHeight;
             DrawMarking(g);
             for (int i = 0; i < places.Count; i++)
             {
+                places[i].SetPosition((i / rows) * placeWidth, (i % rows) * placeHeight, fieldWidth, fieldHeight);
                 places[i].Draw(g);
             }
         }
@@ -92,6 +109,33 @@ namespace BD.WorldOfPlanes
                 return null;
             }
             return places[index];
+        }
+
+        public void Sort() => places.Sort((IComparer<T>)new PlaneComparer());
+
+        public void Dispose()
+        {
+        }
+
+        public bool MoveNext()
+        {
+            currentIndex++;
+            return currentIndex < places.Count;
+        }
+
+        public void Reset()
+        {
+            currentIndex = -1;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this;
         }
     }
 }

@@ -82,25 +82,20 @@ namespace BD.WorldOfPlanes
                 {
                     //Начинаем парковку
                     sw.WriteLine($"Parking{separator}{level.Key}");
-                    ITransport plane = null;
-                    for (int i = 0; (plane = level.Value.GetNext(i)) != null; i++)
-
+                    foreach (ITransport plane in level.Value)
                     {
-                        if (plane != null)
+                        //если место не пустое
+                        //Записываем тип машины
+                        if (plane.GetType().Name == "Plane")
                         {
-                            //если место не пустое
-                            //Записываем тип машины
-                            if (plane.GetType().Name == "Plane")
-                            {
-                                sw.Write($"Plane{separator}");
-                            }
-                            if (plane.GetType().Name == "PlaneWithRadar")
-                            {
-                                sw.Write($"PlaneWithRadar{separator}");
-                            }
-                            //Записываемые параметры
-                            sw.WriteLine(plane.ToString());
+                            sw.Write($"Plane{separator}");
                         }
+                        if (plane.GetType().Name == "PlaneWithRadar")
+                        {
+                            sw.Write($"PlaneWithRadar{separator}");
+                        }
+                        //Записываемые параметры
+                        sw.WriteLine(plane.ToString());
                     }
                 }
             }

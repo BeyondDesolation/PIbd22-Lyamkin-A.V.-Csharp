@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BD.WorldOfPlanes
 {
-    class PlaneWithRadar : Plane
+    class PlaneWithRadar : Plane, IEquatable<PlaneWithRadar>
     {
         public bool HasRadar { get; private set; }
         public bool MoreEngine { get; private set; }
@@ -115,5 +115,32 @@ namespace BD.WorldOfPlanes
            $"{DopColor.ToArgb()}{separator}{HasRadar}{separator}{MoreEngine}";
         }
 
+        public bool Equals(PlaneWithRadar other)
+        {
+            if (base.Equals(other))
+            {
+                if(HasRadar == other.HasRadar && MoreEngine == other.MoreEngine && DopColor == other.DopColor && DetailsColor == other.DetailsColor)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is PlaneWithRadar planeObj))
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(planeObj);
+            }
+        }
     }
 }
